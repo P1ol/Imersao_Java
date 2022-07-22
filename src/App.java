@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -20,22 +22,29 @@ public class App {
         // Estrair so os dados que interessam (Titulo, Poster, Classificacao)
         var parser = new JsonParser();
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
-        // Cor de texto
+        /* -------------------------------Cor de texto    AULA 1
         String Verde = "\u001B[32m";
         String Preto = "\u001B[30m";
         String Reset = "\u001B[0m";
-        // Fundo do texto
+        //------------------------------ Fundo do texto
         String Amarelo = "\u001B[43m";
-        // Emojis UTF-8
+        // ------------------------------Emojis UTF-8
         String Estrela = "\u2B50";
-        
+        */
         
         //Exibir e manipular
         for (Map<String,String> filme : listaDeFilmes) {
+ 
+            String urlImagem = filme.get("image");
+            String titulo = filme.get("title");
 
-            System.out.println(Verde + "Titulo:" + Reset + filme.get("title"));
-            System.out.println(Verde + "Poster:" + Reset + filme.get("image"));
-            System.out.println(Verde + "Classificacao:" + Reset + Amarelo + Preto + filme.get("imDbRating") + Estrela + Reset);
+            InputStream input = new URL(urlImagem).openStream();
+            String NomeArquivo = titulo.replace(":", "-")  + ".png";
+
+            var geradora = new GeradorDeFigurinha();
+            geradora.cria(input, NomeArquivo);
+            System.out.println("Poster:" + filme.get("image"));
+
         }
 
     }
